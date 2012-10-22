@@ -22,7 +22,14 @@
 <script type="text/javascript" src="resources/js/jquery.bigframe.js"></script>
 <script type="text/javascript">
 	$(document).ready(function() {
+		var CONTEXT_ROOT = '<%= request.getContextPath() %>'; 
 		$('#body').markItUp(mySettings);
+		
+		$("#back").click(function() {
+			
+			document.location.href = CONTEXT_ROOT+'/userhome';
+		});
+		
 		var dialog = $('#dialog-modal');
 		dialog.dialog({              // <-- create the dialog
 			 height: 500,
@@ -64,6 +71,7 @@
 					<tr align="center">
 						<td><input id="postBlogEntry" type="submit" class="blueButton" value="Post" /></td>
 						<td><input id="previewBlogPost" type="button" class="blueButton" value="Preview" /></td>
+						<td><input id="back" type="button" class="blueButton" value="Back" /></td>
 					</tr>
 				</tbody>
 			</table>
@@ -72,7 +80,7 @@
 
 		<div id="error">&nbsp;</div>
 	</div>
-	<div id="dialog-modal" class="messi-modal" title="This is how it will look like !!">
+	<div id="dialog-modal" title="This is how it will look like !!">
    	</div>
 </body>
 </body>
