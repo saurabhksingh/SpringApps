@@ -17,7 +17,7 @@
 		});
 		$("#logout").click(function() {
 			
-			document.location.href = CONTEXT_ROOT+'/logout';
+			document.location.href = '<c:url value="j_spring_security_logout" />';
 		});
 		var items = '<ul>';
 		var entries = $.parseJSON('${blogEntries}');
@@ -42,9 +42,9 @@
 </div>
 <div align="center">
 <table>
-	<tbody>
+	<tbody align="center">
       	<tr>
-      		<td><input id="addPost" type="button" class="blueButton" value="Add Post" />
+      		<td><input id="addPost" type="button" class="blueButton" value="Add Post" /></td>
       		<td><input id="logout" type="button" class="blueButton" value="Logout" /></td>
 		</tr>
      </tbody>

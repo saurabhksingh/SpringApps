@@ -1,5 +1,7 @@
 package com.dev.saurabh.controller;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -43,7 +46,8 @@ public class SignUpController {
         return "signup";
 }
 	@RequestMapping(method=RequestMethod.POST)
-	public String submitform(@ModelAttribute("user") UserAccount user, BindingResult result, HttpServletRequest request, HttpServletResponse response){
+	public String signInUser(@ModelAttribute("user") UserAccount user, BindingResult result, HttpServletRequest request, HttpServletResponse response){
+		logger.info("Attempting to sign in user : "+user.getUserId());
 		user.setDeleted(false);
 		user.setRole(2);
 		StandardPasswordEncoder encoder = new StandardPasswordEncoder();
@@ -52,7 +56,7 @@ public class SignUpController {
 		user.setPassword(hashedPassword);
 		if(userManagementService.create(user))
 		{
-			//loginUser(user, request, password);
+			loginUser(user, request, password);
 			return "redirect:userhome";
 		}
 		
@@ -60,13 +64,12 @@ public class SignUpController {
 	}
 	private void loginUser(UserAccount user, HttpServletRequest request, String password) {
 		try {
-	        // Must be called from request filtered by Spring Security, otherwise SecurityContextHolder is not updated
-			user.setPassword(password);
-			UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(user.getUserId(), user.getPassword());
-	        token.setDetails(new WebAuthenticationDetails(request));
-	        Authentication authentication = this.authenticationManager.authenticate(token);
+			List<GrantedAuthority> authorities = userManagementService.getGrantedAuthorities(user.getRole());
+			Authentication authentication = new UsernamePasswordAuthenticationToken(user, user.getPassword(), authorities);
+		    SecurityContextHolder.getContext().setAuthentication(authentication);
+	        
 	        logger.debug("Logging in with [{}]", authentication.getPrincipal());
-	        SecurityContextHolder.getContext().setAuthentication(authentication);
+	        
 	    } catch (Exception e) {
 	        SecurityContextHolder.getContext().setAuthentication(null);
 	        logger.error("Failure in autoLogin", e);

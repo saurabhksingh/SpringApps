@@ -109,6 +109,7 @@ public class BlogService {
 	public boolean editBlogEntry(BlogEntry newContent)
 	{
 		logger.info("Editing the exisiting blog entry : "+newContent.getBlogId());
+		
 		try
 		{
 			Query query = new Query(Criteria.where(BLOG_ID).is(newContent.getBlogId()));

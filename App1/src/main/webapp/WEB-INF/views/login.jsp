@@ -12,6 +12,11 @@
 		$("#signup").click(function() {
 			document.location.href = CONTEXT_ROOT+'/signup';
 			});
+		$("#fb_login").click(function() {
+			//alert("facebook login");
+			document.location.href = CONTEXT_ROOT+'/signin/facebook';
+			
+			});
 	});
 </script>
 </head>
@@ -24,11 +29,10 @@
 		</div>
 	</c:if>
  
-	<form name='f' action="<c:url value='j_spring_security_check' />"
-		method='POST'>
+	
  
 		<table>
-			<tbody>
+			<tbody align="center">
 				<tr>
 					<td>User:</td>
 					<td><input type='text' name='j_username' value=''>
@@ -40,12 +44,22 @@
 					</td>
 				</tr>
 				<tr>
-      				<td><input type="submit" class="greenButton" value="Login" /></td>
+      				<td>
+      					<form name='f' action="<c:url value='j_spring_security_check' />" method='POST'>
+      						<input type="submit" class="greenButton" value="Login" />
+      					</form>
+      				</td>
+      				<td width="127" height="21">
+      					<form action="<c:url value="/signin/facebook" />" method="POST">
+		    				<button type="submit" class="greenButton">Login with Facebook</button>
+		    				<input type="hidden" name="scope" value="email,publish_stream,offline_access" />		    
+						</form>
+					</td>
       				<td><input id="signup" type="button" class="greenButton" value="Signup" /></td>
 				</tr>
 			</tbody>
 		</table>
  
-	</form>
+	
 </body>
 </html>
